@@ -91,5 +91,24 @@ namespace ejemploEntity.Controllers
 
             return resp;
         }
+
+        [HttpGet]
+        [Route("GetVentaReporte")]
+        public async Task<Respuesta> GetVentaReporte()
+        {
+            var resp = new Respuesta();
+
+            try
+            {
+                resp = await _ventas.GetVentaReporte();
+            }
+            catch (Exception ex)
+            {
+                resp.code = "400";
+                resp.mensaje = $"Error en VentaController {ex.Message}";
+            }
+
+            return resp;
+        }
     }
 }
