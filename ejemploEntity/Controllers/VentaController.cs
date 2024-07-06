@@ -55,14 +55,33 @@ namespace ejemploEntity.Controllers
         }
 
         [HttpPost]
-        [Route("PosVenta")]
-        public async Task<Respuesta> PosVenta(Venta venta)
+        [Route("PostVenta")]
+        public async Task<Respuesta> PostVenta(Venta venta)
         {
             var resp = new Respuesta();
 
             try
             {
-                resp = await _ventas.PosVenta(venta);
+                resp = await _ventas.PostVenta(venta);
+            }
+            catch (Exception ex)
+            {
+                resp.code = "400";
+                resp.mensaje = $"Error en VentaController {ex.Message}";
+            }
+
+            return resp;
+        }
+
+        [HttpPut]
+        [Route("PutVenta")]
+        public async Task<Respuesta> PutVenta(Venta venta)
+        {
+            var resp = new Respuesta();
+
+            try
+            {
+                resp = await _ventas.PutVenta(venta);
             }
             catch (Exception ex)
             {

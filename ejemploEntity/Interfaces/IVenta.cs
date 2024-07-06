@@ -6,6 +6,7 @@ namespace ejemploEntity.Interfaces
     {
         Task<Respuesta> getListaVentas(string? numFactura);
         Task<Respuesta> getVentaCliente(string? numFactura, DateTime? fecha, string? vendedor, float? precio);
-        Task<Respuesta> PosVenta(Venta venta);
+        Task<Respuesta> PostVenta(Venta venta);
+        Task<Respuesta> PutVenta(Venta venta);
     }
 }

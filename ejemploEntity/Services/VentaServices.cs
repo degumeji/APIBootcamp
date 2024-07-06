@@ -259,28 +259,80 @@ namespace ejemploEntity.Services
 
             return resp;
         }
-        public async Task<Respuesta> PosVenta(Venta venta)
+        public async Task<Respuesta> PostVenta(Venta venta)
         {
-            var respuesta = new Respuesta();
+            var resp = new Respuesta();
+            var qry = _context.Ventas;
+
             try
             {
-                var query = _context.Ventas.OrderByDescending(x => x.IdFactura).Select(x => x.IdFactura).FirstOrDefault();
+
+                var query = qry.OrderByDescending(x => x.IdFactura).Select(x => x.IdFactura).FirstOrDefault();
 
                 venta.IdFactura = Convert.ToInt32(query) + 1;
                 venta.FechaHora = DateTime.Now;
 
-                _context.Ventas.Add(venta);
+                qry.Add(venta);
                 await _context.SaveChangesAsync();
 
-                respuesta.code = "000";
-                respuesta.mensaje = "OK";
+                resp.code = "200";
+                resp.mensaje = "Agregado correctamente!";
             }
             catch (Exception ex)
             {
-                respuesta.code = "999";
-                respuesta.mensaje = $"Se generado una novedad, Error: {ex.Message}";
+                resp.code = "999";
+                resp.mensaje = $"Se generado una novedad, Error: {ex.Message}";
             }
-            return respuesta;
+            return resp;
+        }
+        public async Task<Respuesta> PutVenta(Venta venta)
+        {
+            var resp = new Respuesta();
+            var qry = _context.Ventas;
+
+            try
+            {
+                var vta = qry.Where(x => x.NumFact == venta.NumFact).FirstOrDefault();
+
+                if (vta.IdFactura == null || vta.IdFactura == 0)
+                {
+                    resp.code = "400";
+                    resp.data = vta;
+                    resp.mensaje = "No existe el producto";
+                }
+                else
+                {
+
+                    vta.FechaHora = DateTime.Now;
+                    vta.ClienteId = venta.ClienteId;
+                    vta.ProductoId = venta.ProductoId;
+                    vta.ModeloId = venta.ModeloId;
+                    vta.CategId = venta.CategId;
+                    vta.MarcaId = venta.MarcaId;
+                    vta.SucursalId = venta.SucursalId;
+                    vta.Caja = venta.Caja;
+                    vta.Vendedor = venta.Vendedor;
+                    vta.Precio = venta.Precio;
+                    vta.Unidades = venta.Unidades;
+                    vta.Estado = venta.Estado;
+
+                    qry.Update(vta);
+                    await _context.SaveChangesAsync();
+
+                    resp.code = "200";
+                    resp.data = vta;
+                    resp.mensaje = "Actualizado exitosamente";
+                }
+
+                resp.code = "000";
+                resp.mensaje = "OK";
+            }
+            catch (Exception ex)
+            {
+                resp.code = "999";
+                resp.mensaje = $"Se generado una novedad, Error: {ex.Message}";
+            }
+            return resp;
         }
     }
 }
