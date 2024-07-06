@@ -12,7 +12,7 @@ namespace ejemploEntity.Services
     {
         public readonly TestContext _context; // INYECCIÓN DE DEPENDENCIA
         public ControlError err = new ControlError();
-        public string servicio = "VentaServices";
+        public string clase = "VentaServices";
 
         public VentaServices(TestContext context) { _context = context; }
         public async Task<Respuesta> getListaVentas(string? numFactura)
@@ -53,9 +53,9 @@ namespace ejemploEntity.Services
                                                   Precio = v.Precio,
                                                   Unidades = v.Unidades,
                                                   Estado = v.Estado
-                                              });
+                                              }).AsQueryable();
 
-                    resp.data = await q.ToListAsync();
+                    resp.data = await q.ToListAsync();                    
                 }
                 else
                 {
@@ -71,7 +71,7 @@ namespace ejemploEntity.Services
             {
                 resp.code = "400";
                 resp.mensaje = $"Error en VentaServices {ex.Message}";
-                err.LogErrorMetodos($"{servicio}\\{metodo}", ex.Message);
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }            
 
             return resp;
@@ -265,7 +265,7 @@ namespace ejemploEntity.Services
             {
                 resp.code = "400";
                 resp.mensaje = $"Error en VentaServices {ex.Message}";
-                err.LogErrorMetodos($"{servicio}\\{metodo}", ex.Message);
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;
@@ -294,7 +294,7 @@ namespace ejemploEntity.Services
             {
                 resp.code = "999";
                 resp.mensaje = $"Se generado una novedad, Error: {ex.Message}";
-                err.LogErrorMetodos($"{servicio}\\{metodo}", ex.Message);
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
             return resp;
         }
@@ -345,7 +345,7 @@ namespace ejemploEntity.Services
             {
                 resp.code = "999";
                 resp.mensaje = $"Se generado una novedad, Error: {ex.Message}";
-                err.LogErrorMetodos($"{servicio}\\{metodo}", ex.Message);
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
             return resp;
         }
@@ -372,7 +372,7 @@ namespace ejemploEntity.Services
             {
                 resp.code = "400";
                 resp.mensaje = $"Se generado una novedad, Error: {ex.Message}";
-                err.LogErrorMetodos($"{servicio}\\{metodo}", ex.Message);
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;
