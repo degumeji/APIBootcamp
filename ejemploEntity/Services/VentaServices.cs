@@ -31,29 +31,31 @@ namespace ejemploEntity.Services
             {
                 if (numFactura != null && numFactura != "0")
                 {
-                    resp.data = await (from v in qryVen
-                                       join cl in qryCli on v.ClienteId equals cl.ClienteId
-                                       join pr in qryPro on v.ProductoId equals pr.ProductoId
-                                       join mo in qryMod on v.ModeloId equals mo.ModeloId
-                                       join ct in qryCat on v.CategId equals ct.CategId
-                                       join sc in qrySuc on v.SucursalId equals sc.SucursalId
-                                       where v.NumFact.Equals(numFactura) && v.Estado.Equals("Registrada")
-                                       select new VentaDto
-                                       {
-                                           IdFactura = v.IdFactura,
-                                           NumFact = v.NumFact,
-                                           FechaHora = v.FechaHora,
-                                           ClienteDetalle = cl.ClienteNombre,
-                                           ProductoDetalle = pr.ProductoDescrip,
-                                           ModeloDetalle = mo.ModeloDescripción,
-                                           CategDetalle = ct.CategNombre,
-                                           SucursalDetalle = sc.SucursalNombre,
-                                           Caja = v.Caja,
-                                           Vendedor = v.Vendedor,
-                                           Precio = v.Precio,
-                                           Unidades = v.Unidades,
-                                           Estado = v.Estado
-                                       }).ToListAsync();
+                    IQueryable<VentaDto> q = (from v in qryVen
+                                              join cl in qryCli on v.ClienteId equals cl.ClienteId
+                                              join pr in qryPro on v.ProductoId equals pr.ProductoId
+                                              join mo in qryMod on v.ModeloId equals mo.ModeloId
+                                              join ct in qryCat on v.CategId equals ct.CategId
+                                              join sc in qrySuc on v.SucursalId equals sc.SucursalId
+                                              where v.NumFact.Equals(numFactura) && v.Estado.Equals("Registrada")
+                                              select new VentaDto
+                                              {
+                                                  IdFactura = v.IdFactura,
+                                                  NumFact = v.NumFact,
+                                                  FechaHora = v.FechaHora,
+                                                  ClienteDetalle = cl.ClienteNombre,
+                                                  ProductoDetalle = pr.ProductoDescrip,
+                                                  ModeloDetalle = mo.ModeloDescripción,
+                                                  CategDetalle = ct.CategNombre,
+                                                  SucursalDetalle = sc.SucursalNombre,
+                                                  Caja = v.Caja,
+                                                  Vendedor = v.Vendedor,
+                                                  Precio = v.Precio,
+                                                  Unidades = v.Unidades,
+                                                  Estado = v.Estado
+                                              });
+
+                    resp.data = await q.ToListAsync();
                 }
                 else
                 {
@@ -70,7 +72,7 @@ namespace ejemploEntity.Services
                 resp.code = "400";
                 resp.mensaje = $"Error en VentaServices {ex.Message}";
                 err.LogErrorMetodos($"{servicio}\\{metodo}", ex.Message);
-            }
+            }            
 
             return resp;
         }
