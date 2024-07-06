@@ -375,31 +375,5 @@ namespace ejemploEntity.Services
 
             return resp;
         }
-        public async Task<Respuesta> GetVentaReporte()
-        {
-            var resp = new Respuesta();
-
-            try
-            {
-                resp.code = "200";
-                resp.data = await _context.Ventas
-                    .Where(x => x.Precio > 100)
-                    .GroupBy(x => x.Precio)
-                    .Select(g => new
-                    {
-                        CantidadRegistro = g.Count(),
-                        ValorConsultado = g.Key
-                    })
-                    .ToListAsync();
-                resp.mensaje = "Todo OK";
-            }
-            catch (Exception ex)
-            {
-                resp.code = "400";
-                resp.mensaje = $"Se generado una novedad, Error: {ex.Message}";
-            }
-
-            return resp;
-        }
     }
 }
