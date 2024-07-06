@@ -1,5 +1,6 @@
 ﻿using ejemploEntity.Interfaces;
 using ejemploEntity.Models;
+using ejemploEntity.Utilitarios;
 using Microsoft.EntityFrameworkCore;
 
 namespace ejemploEntity.Services
@@ -7,6 +8,8 @@ namespace ejemploEntity.Services
     public class CatalogoServices : ICatalogo
     {
         public readonly TestContext _context;
+        public ControlError err = new ControlError();
+        public string clase = "CatalogoServices";
 
         public CatalogoServices(TestContext context)
         {
@@ -17,6 +20,7 @@ namespace ejemploEntity.Services
         {
             var resp = new Respuesta();
             var qry = _context.Categoria;
+            var metodo = "getCategoria";
 
             try
             {
@@ -36,6 +40,7 @@ namespace ejemploEntity.Services
             {
                 resp.code = "400";
                 resp.mensaje = $"Error catalogo services: {ex.Message}";
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;

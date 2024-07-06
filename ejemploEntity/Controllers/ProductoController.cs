@@ -1,5 +1,6 @@
 ﻿using ejemploEntity.Interfaces;
 using ejemploEntity.Models;
+using ejemploEntity.Utilitarios;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,8 @@ namespace ejemploEntity.Controllers
     public class ProductoController : Controller
     {
         private readonly IProducto _producto;
+        public ControlError err = new ControlError();
+        public string clase = "ProductoController";
 
         public ProductoController(IProducto producto)
         {
@@ -21,6 +24,7 @@ namespace ejemploEntity.Controllers
         public async Task<Respuesta> getListaProductos(int productoId, double precio)
         {
             var resp = new Respuesta();
+            var metodo = "getListaProductos";
 
             try
             {
@@ -30,6 +34,7 @@ namespace ejemploEntity.Controllers
             {
                 resp.code = "400";
                 resp.mensaje = $"Error en Productocontroller {ex.Message}";
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;
@@ -41,6 +46,7 @@ namespace ejemploEntity.Controllers
         {
 
             var resp = new Respuesta();
+            var metodo = "PostProducto";
 
             try
             {
@@ -48,8 +54,9 @@ namespace ejemploEntity.Controllers
             }
             catch (Exception ex)
             {
-
-                throw;
+                resp.code = "400";
+                resp.mensaje = $"Error en Productocontroller {ex.Message}";
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;
@@ -61,6 +68,7 @@ namespace ejemploEntity.Controllers
         {
 
             var resp = new Respuesta();
+            var metodo = "PutProducto";
 
             try
             {
@@ -68,8 +76,9 @@ namespace ejemploEntity.Controllers
             }
             catch (Exception ex)
             {
-
-                throw;
+                resp.code = "400";
+                resp.mensaje = $"Error en Productocontroller {ex.Message}";
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;

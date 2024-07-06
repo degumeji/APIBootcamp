@@ -1,5 +1,6 @@
 ﻿using ejemploEntity.Interfaces;
 using ejemploEntity.Models;
+using ejemploEntity.Utilitarios;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -9,11 +10,14 @@ namespace ejemploEntity.Services
     public class ProductoServices : IProducto
     {
         public readonly TestContext _context;
+        public ControlError err = new ControlError();
+        public string clase = "ProductoServices";
 
         public ProductoServices(TestContext context) { _context = context; }
         public async Task<Respuesta> getListaProductos(int productoId, double precio)
         {
             var resp = new Respuesta();
+            var metodo = "getListaProductos";
 
             var qryPro = _context.Productos;
             var qryMar = _context.Marcas;
@@ -61,6 +65,7 @@ namespace ejemploEntity.Services
             {
                 resp.code = "400";
                 resp.mensaje = $"Error en ProductoServices {ex.Message}";
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;
@@ -69,6 +74,7 @@ namespace ejemploEntity.Services
         {
 
             var resp = new Respuesta();
+            var metodo = "PostProducto";
 
             try
             {
@@ -114,6 +120,7 @@ namespace ejemploEntity.Services
             {
                 resp.code = "400";
                 resp.mensaje = $"Se presentó un error: {ex.Message}";
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;
@@ -122,6 +129,7 @@ namespace ejemploEntity.Services
         {
 
             var resp = new Respuesta();
+            var metodo = "PutProducto";
 
             try
             {
@@ -159,6 +167,7 @@ namespace ejemploEntity.Services
             {
                 resp.code = "400";
                 resp.mensaje = $"Se presentó un error: {ex.Message}";
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;
@@ -167,6 +176,7 @@ namespace ejemploEntity.Services
         {
 
             var resp = new Respuesta();
+            var metodo = "PutProducto2";
 
             try
             {
@@ -204,6 +214,7 @@ namespace ejemploEntity.Services
             {
                 resp.code = "400";
                 resp.mensaje = $"Se presentó un error: {ex.Message}";
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;

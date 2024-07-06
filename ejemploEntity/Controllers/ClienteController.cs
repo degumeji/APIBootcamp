@@ -1,5 +1,6 @@
 ﻿using ejemploEntity.Interfaces;
 using ejemploEntity.Models;
+using ejemploEntity.Utilitarios;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,8 @@ namespace ejemploEntity.Controllers
     public class ClienteController : Controller
     {
         private readonly ICliente _cliente;
+        public ControlError err = new ControlError();
+        public string clase = "ClienteController";
 
         public ClienteController(ICliente cliente)
         {
@@ -21,6 +24,7 @@ namespace ejemploEntity.Controllers
         public async Task<Respuesta> getListaClientes(int clienteId, string? nombreCliente, Double identificacion)
         {
             var resp = new Respuesta();
+            var metodo = "getListaClientes";
 
             try
             {
@@ -30,6 +34,7 @@ namespace ejemploEntity.Controllers
             {
                 resp.code = "400";
                 resp.mensaje = $"Error en ClienteController: {ex.Message}";
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;
@@ -40,6 +45,7 @@ namespace ejemploEntity.Controllers
         public async Task<Respuesta> postCliente([FromBody] Cliente cliente)
         {
             var resp = new Respuesta();
+            var metodo = "postCliente";
 
             try
             {
@@ -49,6 +55,7 @@ namespace ejemploEntity.Controllers
             {
                 resp.code = "400";
                 resp.mensaje = $"Error en ClienteController: {ex.Message}";
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;
@@ -59,6 +66,7 @@ namespace ejemploEntity.Controllers
         public async Task<Respuesta> putCliente([FromBody] Cliente cliente)
         {
             var resp = new Respuesta();
+            var metodo = "putCliente";
 
             try
             {
@@ -68,6 +76,7 @@ namespace ejemploEntity.Controllers
             {
                 resp.code = "400";
                 resp.mensaje = $"Error en ClienteController: {ex.Message}";
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;

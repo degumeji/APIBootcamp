@@ -1,5 +1,6 @@
 ﻿using ejemploEntity.Interfaces;
 using ejemploEntity.Models;
+using ejemploEntity.Utilitarios;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,8 @@ namespace ejemploEntity.Controllers
     public class CatalogoController : Controller
     {
         private readonly ICatalogo _catalogo;
+        public ControlError err = new ControlError();
+        public string clase = "";
 
         public CatalogoController(ICatalogo catalogo)
         {
@@ -21,6 +24,7 @@ namespace ejemploEntity.Controllers
         public async Task<Respuesta> getCategoria(int catalogoId)
         {
             var resp = new Respuesta();
+            var metodo = "getCategoria";
 
             try
             {
@@ -29,7 +33,9 @@ namespace ejemploEntity.Controllers
             catch (Exception ex)
             {
 
-                throw;
+                resp.code = "400";
+                resp.mensaje = $"Error en CatalogoController: {ex.Message}";
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;

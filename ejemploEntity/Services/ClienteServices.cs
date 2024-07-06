@@ -1,5 +1,6 @@
 ﻿using ejemploEntity.Interfaces;
 using ejemploEntity.Models;
+using ejemploEntity.Utilitarios;
 using Microsoft.EntityFrameworkCore;
 
 namespace ejemploEntity.Services
@@ -7,11 +8,14 @@ namespace ejemploEntity.Services
     public class ClienteServices : ICliente
     {
         public readonly TestContext _context;
+        public ControlError err = new ControlError();
+        public string clase = "ClienteServices";
 
         public ClienteServices(TestContext context) { _context = context; }
         public async Task<Respuesta> getListaClientes(int clienteId, string? nombreCliente, Double identificacion)
         {
             var resp = new Respuesta();
+            var metodo = "getListaClientes";
 
             var qry = _context.Clientes;
 
@@ -53,6 +57,7 @@ namespace ejemploEntity.Services
             {
                 resp.code = "400";
                 resp.mensaje = $"Error en ClienteServicio: {ex.Message}";
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;
@@ -62,6 +67,7 @@ namespace ejemploEntity.Services
 
             var resp = new Respuesta();
             var qry = _context.Clientes;
+            var metodo = "postCliente";
 
             try
             {
@@ -80,6 +86,7 @@ namespace ejemploEntity.Services
             {
                 resp.code = "400";
                 resp.mensaje = $"Error en service: {ex.Message}";
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;
@@ -90,6 +97,7 @@ namespace ejemploEntity.Services
             var resp = new Respuesta();
             var cli = new Cliente();
             var qry = _context.Clientes;
+            var metodo = "putCliente";
 
             try
             {
@@ -122,6 +130,7 @@ namespace ejemploEntity.Services
             {
                 resp.code = "400";
                 resp.mensaje = $"Error en servicio: {ex.Message}";
+                err.LogErrorMetodos(clase, metodo, ex.Message);
             }
 
             return resp;
