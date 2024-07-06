@@ -63,7 +63,7 @@ namespace ejemploEntity.Services
                 resp.code = "200";
                 resp.mensaje = "Correcto!";
 
-                err.LogErrorMetodos($"{servicio}\\{metodo}", "Error");
+                //err.LogErrorMetodos($"{servicio}\\{metodo}", "Error");
             }
             catch (Exception ex)
             {
