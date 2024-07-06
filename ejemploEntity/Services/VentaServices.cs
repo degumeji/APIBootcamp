@@ -1,6 +1,7 @@
 ﻿using ejemploEntity.DTOs;
 using ejemploEntity.Interfaces;
 using ejemploEntity.Models;
+using ejemploEntity.Utilitarios;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -10,11 +11,14 @@ namespace ejemploEntity.Services
     public class VentaServices : IVentas
     {
         public readonly TestContext _context; // INYECCIÓN DE DEPENDENCIA
+        public ControlError err = new ControlError();
+        public string servicio = "VentaServices";
 
         public VentaServices(TestContext context) { _context = context; }
         public async Task<Respuesta> getListaVentas(string? numFactura)
         {
             var resp = new Respuesta();
+            var metodo = "getListaVentas";
 
             var qryVen = _context.Ventas;
             var qryCli = _context.Clientes;
@@ -58,11 +62,14 @@ namespace ejemploEntity.Services
 
                 resp.code = "200";
                 resp.mensaje = "Correcto!";
+
+                err.LogErrorMetodos($"{servicio}\\{metodo}", "Error");
             }
             catch (Exception ex)
             {
                 resp.code = "400";
                 resp.mensaje = $"Error en VentaServices {ex.Message}";
+                err.LogErrorMetodos($"{servicio}\\{metodo}", ex.Message);
             }
 
             return resp;
@@ -70,6 +77,7 @@ namespace ejemploEntity.Services
         public async Task<Respuesta> getVentaCliente(string? numFactura, DateTime? fecha, string? vendedor, float? precio)
         {
             var resp = new Respuesta();
+            var metodo = "getVentaCliente";
 
             var qryVen = _context.Ventas;
             var qryCli = _context.Clientes;
@@ -255,6 +263,7 @@ namespace ejemploEntity.Services
             {
                 resp.code = "400";
                 resp.mensaje = $"Error en VentaServices {ex.Message}";
+                err.LogErrorMetodos($"{servicio}\\{metodo}", ex.Message);
             }
 
             return resp;
@@ -263,6 +272,7 @@ namespace ejemploEntity.Services
         {
             var resp = new Respuesta();
             var qry = _context.Ventas;
+            var metodo = "PostVenta";
 
             try
             {
@@ -282,6 +292,7 @@ namespace ejemploEntity.Services
             {
                 resp.code = "999";
                 resp.mensaje = $"Se generado una novedad, Error: {ex.Message}";
+                err.LogErrorMetodos($"{servicio}\\{metodo}", ex.Message);
             }
             return resp;
         }
@@ -289,6 +300,7 @@ namespace ejemploEntity.Services
         {
             var resp = new Respuesta();
             var qry = _context.Ventas;
+            var metodo = "PutVenta";
 
             try
             {
@@ -331,7 +343,36 @@ namespace ejemploEntity.Services
             {
                 resp.code = "999";
                 resp.mensaje = $"Se generado una novedad, Error: {ex.Message}";
+                err.LogErrorMetodos($"{servicio}\\{metodo}", ex.Message);
             }
+            return resp;
+        }
+        public async Task<Respuesta> GetVentaReporte()
+        {
+            var resp = new Respuesta();
+            var metodo = "GetVentaReporte";
+
+            try
+            {
+                resp.code = "200";
+                resp.data = await _context.Ventas
+                    .Where(x => x.Precio > 100)
+                    .GroupBy(x => x.Precio)
+                    .Select(g => new
+                    {
+                        CantidadRegistro = g.Count(),
+                        ValorConsultado = g.Key
+                    })
+                    .ToListAsync();
+                resp.mensaje = "Todo OK";
+            }
+            catch (Exception ex)
+            {
+                resp.code = "400";
+                resp.mensaje = $"Se generado una novedad, Error: {ex.Message}";
+                err.LogErrorMetodos($"{servicio}\\{metodo}", ex.Message);
+            }
+
             return resp;
         }
         public async Task<Respuesta> GetVentaReporte()
