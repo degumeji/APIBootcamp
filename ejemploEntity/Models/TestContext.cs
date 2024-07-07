@@ -32,7 +32,7 @@ public partial class TestContext : DbContext
     public virtual DbSet<Venta> Ventas { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=.;Database=TEST;Integrated Security=true;TrustServerCertificate=True;User=sa;Password=Ucg.2023");
+        => optionsBuilder.UseSqlServer("Server=LAPTOPDTI;Database=TEST;Integrated Security=true;TrustServerCertificate=True;User=sa;Password=Ucg.2023");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
