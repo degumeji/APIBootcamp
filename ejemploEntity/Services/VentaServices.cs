@@ -153,7 +153,7 @@ namespace ejemploEntity.Services
                                        join ct in qryCat on v.CategId equals ct.CategId
                                        join sc in qrySuc on v.SucursalId equals sc.SucursalId
                                        where v.Estado.Equals("Registrada")
-                                             && v.FechaHora >= fecha
+                                             && v.FechaHora >= fecha && v.FechaHora <= DateTime.Now
                                        select new VentaDto
                                        {
                                            IdFactura = v.IdFactura,
