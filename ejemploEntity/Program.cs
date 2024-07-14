@@ -14,6 +14,7 @@ builder.Services.AddScoped<ICliente, ClienteServices>();
 builder.Services.AddScoped<IVentas, VentaServices>();
 builder.Services.AddScoped<IModelo, ModeloServices>();
 builder.Services.AddScoped<IMarca, MarcaServices>();
+builder.Services.AddScoped<ISucursal, SucursalServices>();
 
 //APIs
 builder.Services.AddScoped<IPokeApi, PokeApi>();
